@@ -1,4 +1,4 @@
-const knex = require('knex')
-const knexConfig = require('../knexfile.js')
+import knex from 'knex'
+import config from '../knexfile'
 
-module.exports = knex(knexConfig.development)
+export default knex(config.development)

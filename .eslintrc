@@ -37,7 +37,8 @@
         "resolvePaths": ["."],
         "tryExtensions": [".js", ".json", ".node"]
       }
-    ]
+    ],
+    "no-console": "off"
   },
   "env": {
     "browser": false,
