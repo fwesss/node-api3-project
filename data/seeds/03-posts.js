@@ -134,5 +134,5 @@ exports.seed = function(knex, Promise) {
       text:
         'Indeed. I can avoid being seen, if I wish, but to disappear entirely, that is a rare gift.',
     },
-  ]);
-};
+  ])
+}
