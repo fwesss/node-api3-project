@@ -1,15 +1,15 @@
 exports.up = function(knex) {
   return knex.schema
     .createTable('users', function(users) {
-      users.increments();
+      users.increments()
       users
         .string('name')
         .notNullable()
-        .unique();
+        .unique()
     })
     .createTable('posts', function(posts) {
-      posts.increments();
-      posts.text('text').notNullable();
+      posts.increments()
+      posts.text('text').notNullable()
 
       posts
         .integer('user_id')
@@ -18,10 +18,10 @@ exports.up = function(knex) {
         .references('id')
         .inTable('users')
         .onDelete('CASCADE')
-        .onUpdate('CASCADE');
-    });
-};
+        .onUpdate('CASCADE')
+    })
+}
 
 exports.down = function(knex) {
-  return knex.schema.dropTableIfExists('posts').dropTableIfExists('users');
-};
+  return knex.schema.dropTableIfExists('posts').dropTableIfExists('users')
+}
