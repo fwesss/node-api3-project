@@ -19,6 +19,8 @@ const validatePostId = async (req, res, next) => {
   }
 }
 
+router.use('/:id', validatePostId)
+
 router.route('/').get((req, res) => {
   // do your magic!
 })
