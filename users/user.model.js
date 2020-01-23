@@ -18,7 +18,7 @@ export const insert = user =>
     .insert(user)
     .then(ids => getById(ids[0]))
 
-export const update = (id, changes) =>
+export const update = id => changes =>
   db('users')
     .where({ id })
     .update(changes)
