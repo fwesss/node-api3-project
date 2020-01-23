@@ -1,4 +1,5 @@
 import express from 'express'
+import userRouter from './users/userRouter'
 
 const server = express()
 
@@ -10,6 +11,7 @@ const logger = (req, _res, next) => {
 }
 
 server.use(logger)
+server.use('/api/users', userRouter)
 
 server.get('/', (_req, res) => {
   res.send(`<h2>Let's write some middleware!</h2>`)
