@@ -35,7 +35,15 @@ const validateUser = (req, res, next) => {
 }
 
 const validatePost = (req, res, next) => {
-  // do your magic!
+  if (!req.body) {
+    res.status(400).json({ message: 'missing post data' })
+  }
+
+  if (!req.body.text) {
+    res.status(400).json({ message: 'missing required text field' })
+  }
+
+  next()
 }
 
 router.use('/:id', validateUserId)
@@ -54,7 +62,7 @@ router
   .get((req, res) => {
     // do your magic!
   })
-  .post((req, res) => {
+  .post(validatePost, (req, res) => {
     // do your magic!
   })
 
