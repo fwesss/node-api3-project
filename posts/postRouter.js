@@ -1,27 +1,28 @@
-const express = require('express')
+import { Router } from 'express'
+import controllers from './postControllers'
 
-const router = express.Router()
-
-router.get('/', (req, res) => {
-  // do your magic!
-})
-
-router.get('/:id', (req, res) => {
-  // do your magic!
-})
-
-router.delete('/:id', (req, res) => {
-  // do your magic!
-})
-
-router.put('/:id', (req, res) => {
-  // do your magic!
-})
+const router = Router()
 
 // custom middleware
 
-function validatePostId(req, res, next) {
+const validatePostId = (req, res, next) => {
   // do your magic!
 }
 
-module.exports = router
+router.route('/').get((req, res) => {
+  // do your magic!
+})
+
+router
+  .route('/:id')
+  .get((req, res) => {
+    // do your magic!
+  })
+  .put((req, res) => {
+    // do your magic!
+  })
+  .delete((req, res) => {
+    // do your magic!
+  })
+
+export default router

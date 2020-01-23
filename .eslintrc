@@ -3,14 +3,18 @@
     "ecmaVersion": 2020,
     "sourceType": "module"
   },
-  "plugins": ["import", "optimize-regex", "functional"],
+  "plugins": [
+    "import",
+    "optimize-regex"
+    // "functional"
+  ],
   "extends": [
     "eslint:recommended",
     "eslint-config-prettier",
     "plugin:import/errors",
     "plugin:import/warnings",
     "airbnb-base",
-    "plugin:functional/recommended",
+    // "plugin:functional/recommended",
     "eslint:recommended",
     "plugin:node/recommended",
     // must be last
@@ -37,7 +41,8 @@
         "resolvePaths": ["."],
         "tryExtensions": [".js", ".json", ".node"]
       }
-    ]
+    ],
+    "no-console": "off"
   },
   "env": {
     "browser": false,
