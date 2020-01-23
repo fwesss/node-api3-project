@@ -26,6 +26,7 @@
     "lint": "eslint --ext .js .",
     "prettier": "prettier --ignore-path .gitignore \"**/*.+(json|js)\"",
     "server": "nodemon --experimental-modules --es-module-specifier-resolution=node index.js",
+    "start": "node index.js",
     "validate": "npm-run-all --parallel check-format lint"
   },
   "husky": {
