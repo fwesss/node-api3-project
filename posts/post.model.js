@@ -1,23 +1,23 @@
 import db from '../data/dbConfig'
 
-const get = () => db('posts')
+export const get = () => db('posts')
 
-const getById = id =>
+export const getById = id =>
   db('posts')
     .where({ id })
     .first()
 
-const insert = post =>
+export const insert = post =>
   db('posts')
     .insert(post)
     .then(ids => getById(ids[0]))
 
-const update = (id, changes) =>
+export const update = (id, changes) =>
   db('posts')
     .where({ id })
     .update(changes)
 
-const remove = id =>
+export const remove = id =>
   db('posts')
     .where('id', id)
     .del()
