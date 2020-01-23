@@ -51,6 +51,7 @@ router
   })
 
 router
+  // .use(validateUserId)
   .route('/:id')
   .get((req, res) => {
     // do your magic!
