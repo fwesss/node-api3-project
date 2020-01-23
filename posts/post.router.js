@@ -1,8 +1,8 @@
-import { Router } from 'express'
+import express from 'express'
 import { getById } from './post.model'
-import controllers from './postControllers'
+import controllers from './post.controllers'
 
-const router = Router()
+const router = express.Router()
 
 const validatePostId = async (req, res, next) => {
   try {
@@ -21,9 +21,7 @@ const validatePostId = async (req, res, next) => {
 
 router.use('/:id', validatePostId)
 
-router.route('/').get((req, res) => {
-  // do your magic!
-})
+router.route('/').get(controllers.getMany)
 
 router
   .route('/:id')
