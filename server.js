@@ -10,6 +10,7 @@ const logger = (req, _res, next) => {
   next()
 }
 
+server.use(express.json())
 server.use(logger)
 server.use('/api/users', userRouter)
 

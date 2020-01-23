@@ -23,7 +23,15 @@ const validateUserId = async (req, res, next) => {
 }
 
 const validateUser = (req, res, next) => {
-  // do your magic!
+  if (!req.body) {
+    res.status(400).json({ message: 'missing user data' })
+  }
+
+  if (!req.body.name) {
+    res.status(400).json({ message: 'missing required name field' })
+  }
+
+  next()
 }
 
 const validatePost = (req, res, next) => {
@@ -37,7 +45,7 @@ router
   .get((req, res) => {
     // do your magic!
   })
-  .post((req, res) => {
+  .post(validateUser, (req, res) => {
     // do your magic!
   })
 
