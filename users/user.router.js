@@ -1,6 +1,6 @@
 import express from 'express'
-import { getById, getUserPosts } from './user.model'
-import controllers from './user.controllers'
+import { getById } from './user.model'
+import userControllers from './user.controllers'
 import postControllers from '../posts/post.controllers'
 
 const router = express.Router()
@@ -50,26 +50,18 @@ router.use('/:id', validateUserId)
 
 router
   .route('/')
-  .get(controllers.getMany)
-  .post(validateUser, controllers.createOne)
+  .get(userControllers.getMany)
+  .post(validateUser, userControllers.createOne)
 
 router
   .route('/:id/posts')
-  .get(async (req, res) => {
-    try {
-      const posts = await getUserPosts(req.params.id)
-      res.status(200).json(posts)
-    } catch (error) {
-      console.error(error)
-      res.status(500).json({ error: 'The information could not be retrieved.' })
-    }
-  })
+  .get(userControllers.getManyUserPosts)
   .post(validatePost, postControllers.createOne)
 
 router
   .route('/:id')
-  .get(controllers.getOne)
-  .put(controllers.updateOne)
-  .delete(controllers.removeOne)
+  .get(userControllers.getOne)
+  .put(userControllers.updateOne)
+  .delete(userControllers.removeOne)
 
 export default router
