@@ -1,16 +1,16 @@
 import express from 'express'
-import { getById } from './userDb'
-// import controllers from './userControllers'
+import { getById, getUserPosts } from './user.model'
+import controllers from './user.controllers'
+import postControllers from '../posts/post.controllers'
 
 const router = express.Router()
-
-// custom middleware
 
 const validateUserId = async (req, res, next) => {
   try {
     const user = await getById(req.params.id)
     if (user) {
       req.user = user
+      next()
     } else {
       res.status(400).json({ message: 'invalid user id' })
     }
@@ -18,8 +18,6 @@ const validateUserId = async (req, res, next) => {
     console.error(error)
     res.status(500).json({ error: 'user information could not be retrieved' })
   }
-
-  next()
 }
 
 const validateUser = (req, res, next) => {
@@ -43,6 +41,8 @@ const validatePost = (req, res, next) => {
     res.status(400).json({ message: 'missing required text field' })
   }
 
+  req.body.user_id = req.params.id
+
   next()
 }
 
@@ -50,33 +50,26 @@ router.use('/:id', validateUserId)
 
 router
   .route('/')
-  .get((req, res) => {
-    // do your magic!
-  })
-  .post(validateUser, (req, res) => {
-    // do your magic!
-  })
+  .get(controllers.getMany)
+  .post(validateUser, controllers.createOne)
 
 router
   .route('/:id/posts')
-  .get((req, res) => {
-    // do your magic!
+  .get(async (req, res) => {
+    try {
+      const posts = await getUserPosts(req.params.id)
+      res.status(200).json(posts)
+    } catch (error) {
+      console.error(error)
+      res.status(500).json({ error: 'The information could not be retrieved.' })
+    }
   })
-  .post(validatePost, (req, res) => {
-    // do your magic!
-  })
+  .post(validatePost, postControllers.createOne)
 
 router
-  // .use(validateUserId)
   .route('/:id')
-  .get((req, res) => {
-    // do your magic!
-  })
-  .put((req, res) => {
-    // do your magic!
-  })
-  .delete((req, res) => {
-    // do your magic!
-  })
+  .get(controllers.getOne)
+  .put(controllers.updateOne)
+  .delete(controllers.removeOne)
 
 export default router

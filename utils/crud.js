@@ -10,9 +10,9 @@ export const getMany = model => async (req, res) => {
 
 export const getOne = model => async (req, res) => {
   try {
-    const items = await model.getById(req.params.id)
-    if (items.length) {
-      res.status(200).json(items[0])
+    const item = await model.getById(req.params.id)
+    if (item) {
+      res.status(200).json(item)
     } else {
       res.status(404).json({
         message: 'The item with the specified ID does not exist.',
