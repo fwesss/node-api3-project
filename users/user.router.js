@@ -61,7 +61,7 @@ router
 router
   .route('/:id')
   .get(userControllers.getOne)
-  .put(userControllers.updateOne)
+  .put(validateUser, userControllers.updateOne)
   .delete(userControllers.removeOne)
 
 export default router
