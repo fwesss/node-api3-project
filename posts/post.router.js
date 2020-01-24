@@ -1,9 +1,27 @@
 import express from 'express'
+import Validation from 'folktale/validation'
+import { validator, didItValidate } from '../utils/validator'
 import { getById as getPostById } from './post.model'
 import controllers from './post.controllers'
 import { getById as getUserById } from '../users/user.model'
 
+const { Success } = Validation
+
 const router = express.Router()
+
+const hasBody = req => !!req.body
+const hasText = req => !!req.body.text
+const hasUserId = req => !!req.body.user_id
+
+const bodyValidator = validator('missing post data', hasBody)
+const textValidator = validator('missing required text field', hasText)
+const userIdValidator = validator('missing required user_id field', hasUserId)
+
+const postValidationResult = req =>
+  Success()
+    .concat(bodyValidator(req))
+    .concat(textValidator(req))
+    .concat(userIdValidator(req))
 
 const validatePostId = async (req, res, next) => {
   try {
@@ -21,29 +39,25 @@ const validatePostId = async (req, res, next) => {
 }
 
 const validatePost = async (req, res, next) => {
-  if (!req.body) {
-    res.status(400).json({ message: 'missing post data' })
-  }
+  const didPostValidate = didItValidate(postValidationResult(req))
 
-  if (!req.body.text) {
-    res.status(400).json({ message: 'missing required text field' })
-  }
-
-  if (!req.body.user_id) {
-    res.status(400).json({ message: 'missing required user_id field' })
-  }
-
-  try {
-    const user = await getUserById(req.body.user_id)
-    if (!user) {
-      res.status(404).json({ message: 'user does not exist' })
+  if (!didPostValidate) {
+    res.status(400).json({
+      errors: postValidationResult(req).value,
+    })
+  } else {
+    try {
+      const user = await getUserById(req.body.user_id)
+      if (!user) {
+        res.status(404).json({ message: 'user does not exist' })
+      }
+    } catch (error) {
+      console.log(error)
+      res.status(500).json({ error: 'user information could not be retrieved' })
     }
-  } catch (error) {
-    console.log(error)
-    res.status(500).json({ error: 'user information could not be retrieved' })
-  }
 
-  next()
+    next()
+  }
 }
 
 router.use('/:id', validatePostId)

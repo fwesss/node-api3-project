@@ -1,9 +1,32 @@
 import express from 'express'
+import Validation from 'folktale/validation'
+import { validator, didItValidate } from '../utils/validator'
 import { getById } from './user.model'
 import userControllers from './user.controllers'
 import postControllers from '../posts/post.controllers'
 
+const { Success } = Validation
+
 const router = express.Router()
+
+const hasBody = req => !!req.body
+const hasName = req => !!req.body.name
+const hasText = req => !!req.body.text
+
+const userDataValidator = validator('missing user data', hasBody)
+const nameValidator = validator('missing required name field', hasName)
+const postDataValidator = validator('missing post data', hasBody)
+const textValidator = validator('missing required text field', hasText)
+
+const userValidationResult = req =>
+  Success()
+    .concat(userDataValidator(req))
+    .concat(nameValidator(req))
+
+const postValidationResult = req =>
+  Success()
+    .concat(postDataValidator(req))
+    .concat(textValidator(req))
 
 const validateUserId = async (req, res, next) => {
   try {
@@ -21,29 +44,24 @@ const validateUserId = async (req, res, next) => {
 }
 
 const validateUser = (req, res, next) => {
-  if (!req.body) {
-    res.status(400).json({ message: 'missing user data' })
-  }
+  const didUserValidate = didItValidate(userValidationResult(req))
 
-  if (!req.body.name) {
-    res.status(400).json({ message: 'missing required name field' })
+  if (!didUserValidate) {
+    res.status(400).json({ errors: userValidationResult(req).value })
+  } else {
+    next()
   }
-
-  next()
 }
 
 const validatePost = (req, res, next) => {
-  if (!req.body) {
-    res.status(400).json({ message: 'missing post data' })
+  const didPostValidate = didItValidate(postValidationResult(req))
+
+  if (!didPostValidate) {
+    res.state(400).json({ errors: postValidationResult(req).value })
+  } else {
+    req.body.user_id = req.params.id
+    next()
   }
-
-  if (!req.body.text) {
-    res.status(400).json({ message: 'missing required text field' })
-  }
-
-  req.body.user_id = req.params.id
-
-  next()
 }
 
 router.use('/:id', validateUserId)

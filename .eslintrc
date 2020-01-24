@@ -14,7 +14,7 @@
     "plugin:import/errors",
     "plugin:import/warnings",
     "airbnb-base",
-    // "plugin:functional/recommended",
+    // "cleanjs",
     "eslint:recommended",
     "plugin:node/recommended",
     // must be last
